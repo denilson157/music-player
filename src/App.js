@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  Header,
+  AddMusic,
+  MusicList,
+  Player
+} from "./components";
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './theme'
+import { Grid } from "@mui/material";
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Header />
+      <Grid container pt={10} >
+
+        <Grid md={7} xs={12} sx={{ p: 1 }}>
+          <AddMusic />
+          <MusicList />
+        </Grid>
+
+        <Grid md={5} xs={12} sx={{ p: 1 }}>
+          <Player />
+        </Grid>
+
+      </Grid>
+    </ThemeProvider>
   );
 }
 
