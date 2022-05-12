@@ -2,29 +2,38 @@ import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Box 
 import React from 'react'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import { useQuery } from '@apollo/client';
+import { GET_SONGS } from '../graphql/song/query'
+
+
 const MusicList = () => {
 
-    const musicMock =
-    {
-        Titulo: 'Gigantes',
-        Artista: 'BK',
-        Imagem: "https://studiosol-a.akamaihd.net/uploadfile/letras/albuns/b/1/0/6/671611541442093.jpg"
+    const { data, loading, error } = useQuery(GET_SONGS)
+
+    if (loading)
+        return <div>
+            Carregando...
+        </div>
+
+    if (error) {
+        console.log(error)
+        return <div>Erro rapá</div>
     }
 
     const Music = ({ music }) => {
-        const { Imagem, Artista, Titulo } = music
+        const { thumbnail, artist, title } = music
 
         return (
 
             <Card sx={{ display: 'flex', my: 2, p: 1, alignItems: 'center' }}>
 
-                <CardMedia image={Imagem} style={{ objectFit: 'cover', width: '140px', height: '140px' }} />
+                <CardMedia image={thumbnail} style={{ objectFit: 'cover', width: '140px', height: '140px' }} />
 
                 <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
 
                     <CardContent>
-                        <Typography variant="h5" component="h2">{Titulo}</Typography>
-                        <Typography variant="subtitle1" component="h3">{Artista}</Typography>
+                        <Typography variant="h5" component="h2">{title}</Typography>
+                        <Typography variant="subtitle1" component="h3">{artist}</Typography>
                     </CardContent>
 
                     <CardActions>
@@ -51,9 +60,9 @@ const MusicList = () => {
         <>
             {
 
-                Array.from({ length: 10 }, () => musicMock)
-                    .map((music, index) =>
-                        <Music key={`songId_${index}`} music={music} />
+                data.song
+                    .map(music =>
+                        <Music key={`songId_${music.id}`} music={music} />
                     )
             }
         </>

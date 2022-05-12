@@ -6,7 +6,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-const Player = () => {
+const Player = ({ telaGrande }) => {
     return (
         <>
 
@@ -40,7 +40,10 @@ const Player = () => {
 
             </Card>
 
-            <Queue />
+            {
+                telaGrande &&
+                <Queue />
+            }
         </>
     )
 }
