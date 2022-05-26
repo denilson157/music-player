@@ -5,8 +5,18 @@ import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Box,
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useContext } from 'react';
+import { SongContext } from './Main';
 
-const Player = ({ telaGrande }) => {
+const Player = ({ telaGrande, queue }) => {
+    const { currentSong, songDispatch } = useContext(SongContext)
+
+    const handlePlayButton = () => {
+        songDispatch({ type: currentSong?.isPlaying ? "PAUSE_SONG" : "PLAY_SONG" })
+    }
+
+
+    const song = currentSong?.song
     return (
         <>
 
@@ -16,15 +26,23 @@ const Player = ({ telaGrande }) => {
 
                     <CardContent sx={{ display: 'flex' }}>
 
-                        <Typography variant="h5" component="h2"> Título da música </Typography>
-                        <Typography variant="subtitle1" component="h2"> Nome do artista </Typography>
+                        <Typography variant="h5" component="h2"> {song?.title} </Typography>
+                        <Typography variant="subtitle1" component="h2"> {song?.artist} </Typography>
 
                     </CardContent>
 
                     <CardActions >
 
                         <IconButton> <SkipPreviousIcon /></IconButton>
-                        <IconButton> <PlayArrowIcon /></IconButton>
+                        <IconButton onClick={handlePlayButton}>
+
+                            {currentSong?.isPlaying ?
+
+                                <PlayArrowIcon style={{ fontSize: '40px' }} />
+                                :
+                                <PlayArrowIcon style={{ fontSize: '40px' }} />
+                            }
+                        </IconButton>
                         <IconButton> <SkipNextIcon /></IconButton>
                         <Typography>
                             00:02:02
@@ -32,7 +50,7 @@ const Player = ({ telaGrande }) => {
 
                     </CardActions>
 
-                    <CardMedia image="https://studiosol-a.akamaihd.net/uploadfile/letras/albuns/b/1/0/6/671611541442093.jpg" style={{ objectFit: 'cover', width: '140px', height: '140px' }} />
+                    <CardMedia image={song?.thumbnail} />
 
                 </Box>
 
@@ -42,7 +60,7 @@ const Player = ({ telaGrande }) => {
 
             {
                 telaGrande &&
-                <Queue />
+                <Queue queue={queue} />
             }
         </>
     )

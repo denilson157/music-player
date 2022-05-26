@@ -2,13 +2,17 @@ import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Box 
 import React from 'react'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
-import { useQuery } from '@apollo/client';
-import { GET_SONGS } from '../graphql/song/query'
+import { useQuery, useSubscription } from '@apollo/client';
+import { GET_SONGS } from '../graphql/subscription'
+import { useContext } from 'react';
+import { SongContext } from './Main';
 
 
-const MusicList = () => {
+const MusicList = ({ queue }) => {
 
-    const { data, loading, error } = useQuery(GET_SONGS)
+    const { data, loading, error } = useSubscription(GET_SONGS)
+
+    const { currentSong, songDispatch } = useContext(SongContext)
 
     if (loading)
         return <div>
@@ -20,9 +24,19 @@ const MusicList = () => {
         return <div>Erro rapá</div>
     }
 
+
     const Music = ({ music }) => {
         const { thumbnail, artist, title } = music
 
+        const handleChangeSong = () => {
+            songDispatch({ type: 'CHANGE_SONG', paylod: music })
+            songDispatch({ type: currentSong.isPlaying && currentSong?.song?.id === music.id ? "PAUSE_SONG" : "PLAY_SONG" })
+        }
+
+        const handleAddQueue = () => {
+            queue.queueDispatch({ type: "ADD_QUEUE", payload: music })
+        }
+        
         return (
 
             <Card sx={{ display: 'flex', my: 2, p: 1, alignItems: 'center' }}>
@@ -38,14 +52,22 @@ const MusicList = () => {
 
                     <CardActions>
 
-                        <IconButton>
+                        <IconButton onClick={handleChangeSong}>
 
+                            {currentSong.isPlaying && currentSong?.song?.id === music.id ?
+
+                                <PlayArrowIcon />
+                                :
+                                <PlayArrowIcon />
+                            }
                             <PlayArrowIcon color="secondary" />
+
                         </IconButton>
 
-                        <IconButton>
+                        <IconButton onClick={handleAddQueue}>
 
                             <QueueMusicIcon color="secondary" />
+
                         </IconButton>
 
                     </CardActions>

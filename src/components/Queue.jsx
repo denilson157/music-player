@@ -2,21 +2,14 @@ import { Avatar, IconButton, Typography, Box } from '@mui/material'
 import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const Queue = () => {
-
-    const musicMock =
-    {
-        id: 'lbksdibjhijoncxvkbughlhczxf',
-        title: 'Gigantes',
-        artist: 'BK',
-        thumbnail: "https://studiosol-a.akamaihd.net/uploadfile/letras/albuns/b/1/0/6/671611541442093.jpg",
-        url: '',
-        duration: '',
-        created_at: new Date()
-    }
+const Queue = ({ queue }) => {
 
     const Music = ({ music }) => {
         const { thumbnail, artist, title } = music
+
+        const removeMusic = () => {
+            queue.queueDispatch({ type: 'REMOVE_QUEUE', payload: { music } })
+        }
 
         return (
             <Box
@@ -33,7 +26,7 @@ const Queue = () => {
                     <Typography variant="subtitle2" component="h2">{title}</Typography>
                     <Typography variant="body2" component="h3">{artist}</Typography>
                 </div>
-                <IconButton>
+                <IconButton onClick={removeMusic}>
                     <DeleteIcon color="error" />
                 </IconButton>
 
@@ -45,11 +38,11 @@ const Queue = () => {
     return (
         <>
             <Typography>
-                Fila(5)
+                Fila{` (${queue.currentQueue.length})`}
             </Typography>
             {
 
-                Array.from({ length: 4 }, () => musicMock)
+                queue.currentQueue
                     .map((music, index) =>
                         <Music key={`songId_${index}`} music={music} />
                     )
