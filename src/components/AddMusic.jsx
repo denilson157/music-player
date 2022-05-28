@@ -21,11 +21,11 @@ const initialValuesSong = {
 const AddMusic = () => {
 
     const [openDialog, setOpenDialog] = useState(false);
-    const [song, setSong] = useState({ ...initialValuesSong });
     const [url, setUrl] = useState('');
+    const [song, setSong] = useState({ ...initialValuesSong });
     const [blockButton, setBlockButton] = useState(true);
-
     const [insertSong] = useMutation(INSERT_SONG);
+
 
 
     const handleDialog = () => setOpenDialog(prev => !prev)
@@ -65,7 +65,7 @@ const AddMusic = () => {
 
     const saveSong = async () => {
         const { duration, title, artist, url, thumbnail } = song
-        
+
         try {
 
             await insertSong({

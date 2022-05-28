@@ -12,7 +12,6 @@ const MusicList = ({ queue }) => {
 
     const { data, loading, error } = useSubscription(GET_SONGS)
 
-    const { currentSong, songDispatch } = useContext(SongContext)
 
     if (loading)
         return <div>
@@ -27,16 +26,17 @@ const MusicList = ({ queue }) => {
 
     const Music = ({ music }) => {
         const { thumbnail, artist, title } = music
+        const { currentSong, songDispatch } = useContext(SongContext)
 
         const handleChangeSong = () => {
-            songDispatch({ type: 'CHANGE_SONG', paylod: music })
+            songDispatch({ type: 'CHANGE_SONG', paylod: { music } })
             songDispatch({ type: currentSong.isPlaying && currentSong?.song?.id === music.id ? "PAUSE_SONG" : "PLAY_SONG" })
         }
 
         const handleAddQueue = () => {
             queue.queueDispatch({ type: "ADD_QUEUE", payload: music })
         }
-        
+
         return (
 
             <Card sx={{ display: 'flex', my: 2, p: 1, alignItems: 'center' }}>
